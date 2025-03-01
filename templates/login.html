@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SmartDiaTrack</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1a91ff;
+            --secondary-color: #0055b3;
+            --accent-color: #00d1ff;
+            --medical-blue: #0077cc;
+            --light-blue: #e6f3ff;
+            --success-green: #00b894;
+            --light-green: #e6fff7;
+        }
+ 
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            color: #1f2937;
+            min-height: 100vh;
+            display: flex;
+            background: linear-gradient(135deg, var(--light-blue) 0%, var(--light-green) 100%);
+            background-image:
+                url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><path d="M25 15h10v10h10v10H35v10H25V35H15V25h10V15z" fill="%230077cc" fill-opacity="0.05"/></svg>'),
+                url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="3" fill="%2300b894" fill-opacity="0.05"/></svg>');
+        }
+ 
+        .login-page {
+            display: flex;
+            width: 100%;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+ 
+        .login-container {
+            display: flex;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 1000px;
+        }
+ 
+        .login-image {
+            flex: 1;
+            background: linear-gradient(135deg, rgba(0, 119, 204, 0.95) 0%, rgba(0, 85, 179, 0.95) 100%),
+                        url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=2100');
+            background-size: cover;
+            background-position: center;
+            padding: 3rem;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+ 
+        .login-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M45 40h10v10h10v10H55v10H45V60H35V50h10V40z" fill="%23ffffff" fill-opacity="0.1"/></svg>');
+        }
+ 
+        .login-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                url('data:image/svg+xml,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M45 40h10v10h10v10H55v10H45V60H35V50h10V40z" fill="%23ffffff" fill-opacity="0.1"/></svg>'),
+                url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="2" fill="%23ffffff" fill-opacity="0.1"/></svg>');
+        }
+ 
+        .login-image h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            position: relative;
+        }
+ 
+        .login-image p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+        }
+ 
+        .login-form {
+            flex: 1;
+            padding: 3rem;
+            background: transparent;
+        }
+ 
+        .login-form h2 {
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+        }
+ 
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+ 
+        .form-group i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--medical-blue);
+        }
+ 
+        .login-form input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid rgba(0, 119, 204, 0.1);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+ 
+        .login-form input:focus {
+            background: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(26, 145, 255, 0.1);
+        }
+ 
+        .login-form button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(26, 145, 255, 0.2);
+        }
+ 
+        .login-form button:hover {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26, 145, 255, 0.3);
+        }
+ 
+        .login-links {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+ 
+        .login-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin: 0 1rem;
+        }
+ 
+        .login-links a:hover {
+            text-decoration: underline;
+        }
+ 
+        .medical-icons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+ 
+        .medical-icons i {
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+ 
+        .medical-icons i:hover {
+            transform: translateY(-3px);
+            color: white;
+        }
+ 
+        .decorative-circles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+ 
+        .decorative-circles::before,
+        .decorative-circles::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+ 
+        .decorative-circles::before {
+            width: 300px;
+            height: 300px;
+            top: -150px;
+            right: -150px;
+        }
+ 
+        .decorative-circles::after {
+            width: 200px;
+            height: 200px;
+            bottom: -100px;
+            left: -100px;
+        }
+ 
+        .medical-background {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            opacity: 0.1;
+            background-image: url('data:image/svg+xml,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path d="M100 20v160M20 100h160" stroke="%23ffffff" stroke-width="40" stroke-linecap="round"/></svg>');
+        }
+ 
+        @media (max-width: 768px) {
+            .login-image {
+                display: none;
+            }
+           
+            .login-container {
+                max-width: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-page">
+        <div class="login-container">
+            <div class="login-image">
+                <div class="decorative-circles"></div>
+                <div class="medical-background"></div>
+                <div>
+                    <h1>SmartDiaTrack</h1>
+                    <p>Your intelligent companion for seamless diabetes management</p>
+                </div>
+                <div class="medical-icons">
+                    <i class="fas fa-heartbeat"></i>
+                    <i class="fas fa-notes-medical"></i>
+                    <i class="fas fa-user-md"></i>
+                    <i class="fas fa-capsules"></i>
+                    <i class="fas fa-stethoscope"></i>
+                </div>
+            </div>
+            <div class="login-form">
+                <h2>Welcome Back</h2>
+                <form method="POST">
+                    <div class="form-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" name="email" placeholder="Email Address" required>
+                    </div>
+                    <div class="form-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" name="password" placeholder="Password" required>
+                    </div>
+                   <a href="http://127.0.0.1:5003/" style="text-decoration: none;">
+    <button type="button">Log In</button>
+</a>
+
+                </form>
+                <div class="login-links">
+                    <a href="#">Forgot Password?</a>
+                    <a href="http://127.0.0.1:5006/">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+ 

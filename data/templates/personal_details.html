@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Questionnaire - SmartDiaTrack</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1a91ff;
+            --secondary-color: #0055b3;
+            --accent-color: #00d1ff;
+            --medical-blue: #0077cc;
+            --light-blue: #e6f3ff;
+            --success-green: #00b894;
+            --light-green: #e6fff7;
+        }
+ 
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, var(--light-blue) 0%, var(--light-green) 100%);
+            min-height: 100vh;
+        }
+ 
+        /* Header Styles */
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+ 
+        nav {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+ 
+        nav h2 {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 1.8rem;
+        }
+ 
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+ 
+        .nav-links a {
+            color: var(--medical-blue);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+ 
+        .nav-links a:hover {
+            background: var(--light-blue);
+            color: var(--primary-color);
+        }
+ 
+        .nav-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+ 
+        .nav-dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            min-width: 250px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            padding: 0.5rem 0;
+            z-index: 1000;
+        }
+ 
+        .nav-dropdown:hover .nav-dropdown-content {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+ 
+        .nav-dropdown-content a {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem 1.2rem;
+            color: var(--medical-blue);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+ 
+        .nav-dropdown-content a:hover {
+            background: var(--light-blue);
+        }
+ 
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+ 
+        /* Form Styles */
+        .form-container {
+            max-width: 800px;
+            margin: 100px auto 40px;
+            padding: 2rem;
+        }
+ 
+        .form-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+ 
+        .form-section h2 {
+            color: var(--medical-blue);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--light-blue);
+        }
+ 
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+ 
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+            font-weight: 500;
+        }
+ 
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+ 
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(26, 145, 255, 0.1);
+        }
+ 
+        .test-reports {
+            margin-top: 2rem;
+        }
+ 
+        .report-fields {
+            background: var(--light-blue);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+ 
+        button {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(26, 145, 255, 0.2);
+        }
+ 
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26, 145, 255, 0.3);
+        }
+ 
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 1rem;
+                margin-top: 80px;
+            }
+        }
+ 
+        .progress-bar {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            background: var(--light-blue);
+            padding: 1rem;
+            z-index: 999;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+ 
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+ 
+        .step {
+            display: flex;
+            align-items: center;
+            color: var(--medical-blue);
+            font-size: 0.9rem;
+        }
+ 
+        .step.active {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+ 
+        .step i {
+            margin-right: 0.5rem;
+        }
+ 
+        .form-section {
+            display: none;
+        }
+ 
+        .form-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+ 
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+ 
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+ 
+        .btn-prev {
+            background: var(--light-blue);
+            color: var(--medical-blue);
+        }
+ 
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+ 
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+ 
+        .radio-group {
+            display: flex;
+            gap: 2rem;
+        }
+ 
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+ 
+        textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            resize: vertical;
+            min-height: 100px;
+        }
+ 
+        .report-fields {
+            background: var(--light-blue);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+ 
+        .report-fields h3 {
+            color: var(--medical-blue);
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+ 
+        .add-report-btn {
+            background: var(--success-green);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+ 
+        .add-report-btn:hover {
+            background: #009b7d;
+        }
+ 
+        .report-fields {
+            position: relative;
+        }
+ 
+        .remove-report {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #ff4757;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+ 
+        .remove-report:hover {
+            background: #ff6b81;
+            transform: scale(1.1);
+        }
+ 
+        .btn-submit {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(26, 145, 255, 0.2);
+        }
+ 
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26, 145, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <h2>SmartDiaTrack</h2>
+            <div class="nav-links">
+                <a href="#">About Us</a>
+                <div class="nav-dropdown">
+                    <a href="#">Contact</a>
+                    <div class="nav-dropdown-content">
+                        <a href="tel:9529200000">
+                            <i class="fas fa-phone"></i>
+                            95292XXXXX
+                        </a>
+                        <a href="mailto:smartdiatrack@gmail.com">
+                            <i class="fas fa-envelope"></i>
+                            smartdiatrack@gmail.com
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+ 
+    <div class="progress-bar">
+        <div class="progress-steps">
+            <div class="step active"><i class="fas fa-user"></i>Personal Info</div>
+            <div class="step"><i class="fas fa-notes-medical"></i>Medical History</div>
+            <div class="step"><i class="fas fa-heartbeat"></i>Health Metrics</div>
+            <div class="step"><i class="fas fa-file-medical"></i>Test Reports</div>
+            <div class="step"><i class="fas fa-running"></i>Lifestyle</div>
+            <div class="step"><i class="fas fa-clipboard-check"></i>Goals</div>
+        </div>
+    </div>
+ 
+    <div class="form-container">
+        <form id="healthQuestionnaire">
+            <!-- Section 1: Personal Information -->
+            <div class="form-section active">
+                <h2>Personal Information</h2>
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" required>
+                </div>
+                <div class="form-group">
+                    <label for="age">Age</label>
+                    <input type="number" id="age" required>
+                </div>
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select id="gender" required>
+                        <option value="">Select</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" required>
+                </div>
+            </div>
+ 
+            <!-- Section 2: Medical History -->
+            <div class="form-section">
+                <h2>Medical History</h2>
+                <div class="form-group">
+                    <label>Type of Diabetes</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="type1" name="diabetesType" value="type1">
+                            <label for="type1">Type 1</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="type2" name="diabetesType" value="type2">
+                            <label for="type2">Type 2</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="gestational" name="diabetesType" value="gestational">
+                            <label for="gestational">Gestational</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="diagnosisDate">Date of Diagnosis (Optional)</label>
+                    <input type="date" id="diagnosisDate">
+                </div>
+                <div class="form-group">
+                    <label>Family History of Diabetes</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="none" name="familyHistory" onclick="handleNoneSelection(this)">
+                            <label for="none">None</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="parent" name="familyHistory" class="family-member">
+                            <label for="parent">Parent</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sibling" name="familyHistory" class="family-member">
+                            <label for="sibling">Sibling</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="grandparent" name="familyHistory" class="family-member">
+                            <label for="grandparent">Grandparent</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="allergies">Known Allergies</label>
+                    <textarea id="allergies" placeholder="List any known allergies..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="conditions">Other Medical Conditions</label>
+                    <textarea id="conditions" placeholder="List any other medical conditions..."></textarea>
+                </div>
+            </div>
+ 
+            <!-- Section 3: Health Metrics -->
+            <div class="form-section">
+                <h2>Health Metrics</h2>
+                <div class="form-group">
+                    <label for="weight">Weight (kg)</label>
+                    <input type="number" id="weight" step="0.1">
+                </div>
+                <div class="form-group">
+                    <label for="height">Height (cm)</label>
+                    <input type="number" id="height">
+                </div>
+                <div class="form-group">
+                    <label for="bloodPressure">Blood Pressure (mmHg)</label>
+                    <div style="display: flex; gap: 1rem;">
+                        <input type="number" id="systolic" placeholder="Systolic">
+                        <input type="number" id="diastolic" placeholder="Diastolic">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="cholesterol">Cholesterol Levels</label>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                        <input type="number" id="hdl" placeholder="HDL">
+                        <input type="number" id="ldl" placeholder="LDL">
+                        <input type="number" id="triglycerides" placeholder="Triglycerides">
+                    </div>
+                </div>
+            </div>
+ 
+            <!-- Section 4: Test Reports -->
+            <div class="form-section">
+                <h2>Test Reports</h2>
+                <div id="reportsContainer">
+                    <!-- Initial report -->
+                    <div class="report-fields">
+                        <h3>Report 1</h3>
+                        <div class="form-group">
+                            <label for="reportDate0">Test Date</label>
+                            <input type="date" id="reportDate0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fastingGlucose0">Fasting Blood Glucose (mg/dL)</label>
+                            <input type="number" id="fastingGlucose0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="postPrandial0">Post Prandial Glucose (mg/dL)</label>
+                            <input type="number" id="postPrandial0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="hba1c0">HbA1c (%)</label>
+                            <input type="number" id="hba1c0" step="0.1" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Urine Test Information</label>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                                <div>
+                                    <label for="urineGlucose0">Urine Glucose</label>
+                                    <select id="urineGlucose0">
+                                        <option value="">Select result</option>
+                                        <option value="negative">Negative</option>
+                                        <option value="trace">Trace</option>
+                                        <option value="1+">1+</option>
+                                        <option value="2+">2+</option>
+                                        <option value="3+">3+</option>
+                                        <option value="4+">4+</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="urineKetones0">Ketones</label>
+                                    <select id="urineKetones0">
+                                        <option value="">Select result</option>
+                                        <option value="negative">Negative</option>
+                                        <option value="trace">Trace</option>
+                                        <option value="small">Small</option>
+                                        <option value="moderate">Moderate</option>
+                                        <option value="large">Large</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="urineProtein0">Protein</label>
+                                    <select id="urineProtein0">
+                                        <option value="">Select result</option>
+                                        <option value="negative">Negative</option>
+                                        <option value="trace">Trace</option>
+                                        <option value="1+">1+</option>
+                                        <option value="2+">2+</option>
+                                        <option value="3+">3+</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" id="addReportBtn" class="add-report-btn">
+                    <i class="fas fa-plus"></i> Add Another Report
+                </button>
+            </div>
+ 
+            <!-- Section 5: Lifestyle -->
+            <div class="form-section">
+                <h2>Lifestyle Information</h2>
+                <div class="form-group">
+                    <label>Physical Activity Level</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="sedentary" name="activityLevel">
+                            <label for="sedentary">Sedentary</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="moderate" name="activityLevel">
+                            <label for="moderate">Moderate</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="active" name="activityLevel">
+                            <label for="active">Active</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="exerciseRoutine">Exercise Routine</label>
+                    <textarea id="exerciseRoutine" placeholder="Describe your typical exercise routine..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="sleepHours">Average Hours of Sleep</label>
+                    <input type="number" id="sleepHours" min="0" max="24">
+                </div>
+                <div class="form-group">
+                    <label>Diet Preferences</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="vegetarian">
+                            <label for="vegetarian">Vegetarian</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="vegan">
+                            <label for="vegan">Vegan</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="glutenFree">
+                            <label for="glutenFree">Gluten-Free</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="mixed">
+                            <label for="mixed">Mixed</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+ 
+            <!-- Section 6: Goals -->
+            <div class="form-section">
+                <h2>Health Goals</h2>
+                <div class="form-group">
+                    <label for="bloodSugarGoal">Target Blood Sugar Range</label>
+                    <div style="display: flex; gap: 1rem;">
+                        <input type="number" id="bloodSugarMin" placeholder="Minimum">
+                        <input type="number" id="bloodSugarMax" placeholder="Maximum">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="weightGoal">Weight Goal (kg)</label>
+                    <input type="number" id="weightGoal" step="0.1">
+                </div>
+                <div class="form-group">
+                    <label for="activityGoal">Weekly Activity Goal (hours)</label>
+                    <input type="number" id="activityGoal">
+                </div>
+                <div class="form-group">
+                    <label for="additionalGoals">Additional Health Goals</label>
+                    <textarea id="additionalGoals" placeholder="Describe any other health goals..."></textarea>
+                </div>
+            </div>
+ 
+            <div class="navigation-buttons">
+                <button type="button" class="btn-prev" id="prevBtn" style="display: none;">Previous</button>
+                <button type="button" class="btn-next" id="nextBtn">Next</button>
+                <button type="button" class="btn-submit" id="submitBtn" style="display: none;">Submit</button>
+            </div>
+        </form>
+    </div>
+ 
+    <script>
+        let currentSection = 0;
+        const sections = document.querySelectorAll('.form-section');
+        const steps = document.querySelectorAll('.step');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitBtn = document.getElementById('submitBtn');
+ 
+        function showSection(n) {
+            // Validate section number
+            if (n >= 0 && n < sections.length) {
+                sections[currentSection].classList.remove('active');
+                steps[currentSection].classList.remove('active');
+                currentSection = n;
+                sections[currentSection].classList.add('active');
+                steps[currentSection].classList.add('active');
+
+                // Update button visibility
+                prevBtn.style.display = currentSection === 0 ? 'none' : 'block';
+                if (currentSection === sections.length - 1) {
+                    nextBtn.style.display = 'none';
+                    submitBtn.style.display = 'block';
+                } else {
+                    nextBtn.style.display = 'block';
+                    submitBtn.style.display = 'none';
+                }
+            }
+        }
+
+        // Add event listeners for navigation
+        prevBtn.addEventListener('click', () => showSection(currentSection - 1));
+        nextBtn.addEventListener('click', () => showSection(currentSection + 1));
+
+        // Add submit button event listener
+        submitBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Submit button clicked');
+
+            // Get lifestyle data properly
+            const dietPreferences = [];
+            if(document.getElementById('vegetarian').checked) dietPreferences.push('Vegetarian');
+            if(document.getElementById('vegan').checked) dietPreferences.push('Vegan');
+            if(document.getElementById('glutenFree').checked) dietPreferences.push('Gluten-Free');
+            if(document.getElementById('mixed').checked) dietPreferences.push('Mixed');
+
+            let activityLevel = '';
+            if(document.getElementById('sedentary').checked) activityLevel = 'Sedentary';
+            if(document.getElementById('moderate').checked) activityLevel = 'Moderate';
+            if(document.getElementById('active').checked) activityLevel = 'Active';
+
+            const formData = {
+                personalInfo: {
+                    fullName: document.getElementById('fullName').value,
+                    age: document.getElementById('age').value,
+                    gender: document.getElementById('gender').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value
+                },
+                medicalHistory: {
+                    diabetesType: document.querySelector('input[name="diabetesType"]:checked')?.value || 'Not specified',
+                    diagnosisDate: document.getElementById('diagnosisDate').value
+                },
+                healthMetrics: {
+                    weight: document.getElementById('weight').value,
+                    height: document.getElementById('height').value,
+                    systolic: document.getElementById('systolic').value,
+                    diastolic: document.getElementById('diastolic').value
+                },
+                lifestyle: {
+                    activityLevel: activityLevel || 'Not specified',
+                    sleepHours: document.getElementById('sleepHours').value || 'Not specified',
+                    dietPreferences: dietPreferences
+                },
+                testReports: {
+                    fastingBloodGlucose: document.getElementById('fastingGlucose0').value,
+                    postPrandialGlucose: document.getElementById('postPrandial0').value,
+                    hba1c: document.getElementById('hba1c0').value
+                }
+            };
+
+            // Send data to server
+            fetch('/submit_form', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Data submitted successfully!');
+                    // Instead of immediate redirect, use setTimeout
+                    setTimeout(() => {
+                        window.location.href = '/';  // Redirect to home page
+                    }, 1000);  // Wait 1 second before redirect
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Error submitting form. Please try again.');
+            });
+        });
+
+        // Initialize first section
+        showSection(0);
+    </script>
+</body>
+</html>
